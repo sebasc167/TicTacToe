@@ -7,6 +7,7 @@ public class tictactoe {
         System.out.println("Please type in where you would like to make your move");
     }
     public static void main(String[] args){
+        /*
         System.out.println("Welcome players to my TicTacToe game, there are nine spots");
         System.out.println("Player 1, please input your name");
         Scanner s1 = new Scanner(System.in);
@@ -21,90 +22,136 @@ public class tictactoe {
 
 
         }while(b.getCount() != 9 && !b.checkWin());
-
+        */
+        
     }
 }
 
 class player{
     public int [] sum;
     public String name;
-    public player next;
     public player(String name){
-        next = null;
-        sum = new int[5];
-        for(int i = 0; i <5; i++){
-            sum[i] = 0;
-        }
         this.name = name;
     }
     public String toString(){
-        return "Player: " + name + " has won!!";
+        return "Player: " + name ;
     }
 }
 
-class board{
+class board {
     private int count = 0;
+    private int k = 0;
     private int move = 0;
     private player p1;
     private player p2;
     private player[] p = new player[2];
     private String[][] b = new String[3][3];
-    private int[][] bi = new int[3][3];
+    private int[][] bn = new int[3][3];
+    HashMap<Integer, Integer[]> ho = new HashMap<>();
 
-    public board(String p1a, String p2a){
+    public board(String p1a, String p2a) {
         int k = 0;
         count = 0;
         this.p1 = new player(p1a);
         this.p2 = new player(p2a);
         p[0] = p1;
         p[1] = p2;
-        for(int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                b[i][j] = "-";
-                bi[i][j] = (i+1) * (j+1) + k;
-            }
-            k+=3;
-        }
+        ho.put(1, new Integer[]{0, 0});
+        ho.put(2, new Integer[]{0, 1});
+        ho.put(3, new Integer[]{0, 2});
+        ho.put(4, new Integer[]{1, 0});
+        ho.put(5, new Integer[]{1, 1});
+        ho.put(6, new Integer[]{1, 2});
+        ho.put(7, new Integer[]{2, 0});
+        ho.put(8, new Integer[]{2, 1});
+        ho.put(9, new Integer[]{2, 2});
+        fillBoard();
     }
-    public boolean checkWin(){
 
-    }
-    public void printBoard(){
-        for(int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                System.out.println(b[i][j]);
-                System.out.println(bi[i][j]);
+    public void fillBoard() {
+        //fills board in O^2 time
+        for (int k = 0; k < 3; k++) {
+            for (int n = 0; n <= 2; n++) {
+                b[k][n] = "-";
+                bn[k][n] = 3 * k + n + 1;
             }
         }
     }
-    
-    public void setCount(){
+
+    public void printBoard() {
+        System.out.println(" -------------");
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                System.out.print(" | " + b[i][j]);
+            }
+            System.out.println(" |");
+        }
+        System.out.println(" -------------");
+        System.out.println();
+    }
+
+    public void printNumyBoard() {
+        System.out.println(" -------------");
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                System.out.print(" | " + bn[i][j]);
+            }
+            System.out.println(" |");
+        }
+        System.out.println(" -------------");
+    }
+
+    public void setCount() {
         count++;
     }
-    public int getCount(){
+
+    public int getCount() {
         return count;
     }
 
-    public void makeMove(){
-        boolean valid = true;
-        //if move is 0 then its p1 turn
-        if(move == 0){
-            while(valid) {
-                System.out.println("Hello player 1 make your move by picking the number between 1 and 9");
-                printBoard();
-                Scanner sc1 = new Scanner(System.in);
-                int s1 = sc1.nextInt();
-                break;
-            }
+    public boolean checkMove(int s) {
+        if (s > 9 || s < 1) {
+            System.out.println("The number you entered is out of bounds");
+            return false;
         }
-        else{
-            while(valid) {
-                System.out.println("Hello player 1 make your move by picking the number between 1 and 9");
-                printBoard();
-                Scanner sc1 = new Scanner(System.in);
-                int s1 = sc1.nextInt();
-                break;
-            }
+        int[] coor = new int[2];
+        Integer[] c = ho.get(s);
+        for (int i = 0; i < 2; i++) {
+            coor[i] = c[i];
         }
+        if (b[coor[0]][coor[1]] == "X" || b[coor[0]][coor[1]] == "O") {
+            System.out.println("The number with the slot you have selected is already full, try again");
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public void makeMove(int s) {
+        int[] coor = new int[2];
+        Integer[] c = ho.get(s);
+        for (int i = 0; i < 2; i++) {
+            coor[i] = c[i];
+        }
+        b[coor[0]][coor[1]] = (k == 0) ? "X" : "O";
+        k++;
+        System.out.println("Thank you for making a move!\n");
+        setCount();
+    }
+
+    public void printName(int s){
+        if(s==0){
+            System.out.println(p1 + " , it is your turn, please pick a number between 1 and 9, see the map below");
+        }
+        else
+            System.out.println(p2 + " , it is your turn, please pick a number between 1 and 9, see the map below");
+    }
+
+    public int checkWin(){
+        // 0 if tie, 1 if p1, 2 if p2
+
     }
 }
+
+
