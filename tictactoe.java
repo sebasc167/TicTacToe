@@ -4,10 +4,10 @@ import java.util.*;
 public class tictactoe {
     public static void menu(){
         System.out.println("Welcome player");
-        System.out.println("Please type in where you would like to make your move");
+        //System.out.println("Please type in where you would like to make your move");
     }
     public static void main(String[] args){
-        /*
+        int k = 0;
         System.out.println("Welcome players to my TicTacToe game, there are nine spots");
         System.out.println("Player 1, please input your name");
         Scanner s1 = new Scanner(System.in);
@@ -18,12 +18,20 @@ public class tictactoe {
         board b = new board(p1,p2);
         do{
             menu();
+            b.printBoard();
+            b.printNumyBoard();
             Scanner s = new Scanner(System.in);
+            b.printName(k);
+            int n = s.nextInt();
+            if(!b.checkMove(n))
+                continue;
+            b.makeMove(n);
+            b.setCount();
+            k++;
+            b.setk(k);
+        }while(b.getCount() != 9 && b.checkWin()!= 1 && b.checkWin() != 2);
 
 
-        }while(b.getCount() != 9 && !b.checkWin());
-        */
-        
     }
 }
 
@@ -68,6 +76,21 @@ class board {
         fillBoard();
     }
 
+    public String getName(int n){
+        if(n == 0)
+            return p[0].name;
+        else if(n == 1)
+            return p[1].name;
+    }
+
+    public void setk(int s){
+        this.k = s;
+    }
+
+    public int getk(int s){
+        return k;
+    }
+
     public void fillBoard() {
         //fills board in O^2 time
         for (int k = 0; k < 3; k++) {
@@ -106,6 +129,8 @@ class board {
     }
 
     public int getCount() {
+        if(count == 9)
+            System.out.println("There seems to be a tie");
         return count;
     }
 
@@ -149,9 +174,38 @@ class board {
     }
 
     public int checkWin(){
-        // 0 if tie, 1 if p1, 2 if p2
-
+        // 3 if tie, 1 if p1, 2 if p2
+        for(int i = 0; i < 3; i++){
+            int xcount1 = 0, ocount1 = 0;
+            for(int j = 0; j < 3; j++){
+                if(b[i][j] == "X")
+                    xcount1++;
+                else if(b[i][j] == "O")
+                    ocount1++;
+            }
+            if(xcount1 == 3)
+                return 1;
+            else if(ocount1 == 3)
+                return 2;
+        }
+        for(int i = 0; i < 3; i++){
+            int xcount1 = 0, ocount1 = 0;
+            for(int j = 0; j < 3; j++){
+                if(b[j][i] == "X")
+                    xcount1++;
+                else if(b[j][i] == "O")
+                    ocount1++;
+            }
+            if(xcount1 == 3)
+                return 1;
+            else if(ocount1 == 3)
+                return 2;
+        }
+        if(b[0][0] == b[1][1] == b[2][2] == "X")
+            return 1;
+        else if(b[0][0] == b[1][1] == b[2][2] == "O")
+            return 2;
+        return 3;
     }
 }
-
 
