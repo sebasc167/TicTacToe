@@ -26,10 +26,12 @@ public class tictactoe {
             if(!b.checkMove(n))
                 continue;
             b.makeMove(n);
-            b.setCount();
-            k++;
+            if(k==0)
+                k++;
+            else
+                k--;
             b.setk(k);
-        }while(b.getCount() != 9 && b.checkWin()!= 1 && b.checkWin() != 2);
+        }while(b.getCount()!= 9 && b.checkWin()!= 1 && b.checkWin() != 2);
 
 
     }
@@ -76,19 +78,8 @@ class board {
         fillBoard();
     }
 
-    public String getName(int n){
-        if(n == 0)
-            return p[0].name;
-        else if(n == 1)
-            return p[1].name;
-    }
-
     public void setk(int s){
         this.k = s;
-    }
-
-    public int getk(int s){
-        return k;
     }
 
     public void fillBoard() {
@@ -183,10 +174,14 @@ class board {
                 else if(b[i][j] == "O")
                     ocount1++;
             }
-            if(xcount1 == 3)
+            if(xcount1 == 3){
+                System.out.println("You have won: " + p1.name);
                 return 1;
-            else if(ocount1 == 3)
+            }
+            else if(ocount1 == 3){
+                System.out.println("You have won: " + p2.name);
                 return 2;
+            }
         }
         for(int i = 0; i < 3; i++){
             int xcount1 = 0, ocount1 = 0;
@@ -196,16 +191,25 @@ class board {
                 else if(b[j][i] == "O")
                     ocount1++;
             }
-            if(xcount1 == 3)
+            if(xcount1 == 3){
+                System.out.println("You have won: " + p1.name);
                 return 1;
+            }
             else if(ocount1 == 3)
+            {
+                System.out.println("You have won: " + p2.name);
                 return 2;
+            }
+
         }
-        if(b[0][0] == b[1][1] == b[2][2] == "X")
-            return 1;
-        else if(b[0][0] == b[1][1] == b[2][2] == "O")
+        if(b[0][0].equals(b[1][1]) && b[1][1].equals(b[2][2]) && b[2][2].equals("X")){
+            System.out.println("You have won: " + p2.name);
             return 2;
+        }
+        else if(b[0][0].equals(b[1][1]) && b[1][1].equals(b[2][2]) && b[2][2].equals("O")){
+            System.out.println("You have won: " + p2.name);
+            return 2;
+        }
         return 3;
     }
 }
-
